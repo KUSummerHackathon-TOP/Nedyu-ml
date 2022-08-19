@@ -33,7 +33,7 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/textsim")
+@app.get("/summary_score")
 def text_similarity(summary: str, orginal: str):
     summary = summary.replace("\n", " ")
 
