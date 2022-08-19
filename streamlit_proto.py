@@ -8,4 +8,4 @@ st.markdown(strval)
 
 summary = st.text_input("Summary", "")
 if summary:
-    text_similarity(summary, strval)
+    st.text(text_similarity(summary, strval))

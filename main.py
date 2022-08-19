@@ -10,7 +10,14 @@ origins = [
     "*",
 ]
 
-bertscore = bert.BERTScore(model_name_or_path="distilbert-base-uncased", device = "cuda:0")
+USEBERT = False
+
+if USEBERT:
+    bertscore = bert.BERTScore(
+        model_name_or_path="distilbert-base-uncased", device="cuda:0"
+    )
+else:
+    bertscore = None
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,6 +37,12 @@ def read_root():
 def text_similarity(summary: str, orginal: str):
     summary = summary.replace("\n", " ")
 
-    score = bertscore(summary, orginal)
+    if USEBERT:
+        score = bertscore(summary, orginal)
+        score = score["precision"]
+    else:
+        scorer = rouge.ROUGEScore()
+        score = scorer(summary, orginal)
+        score = score["rouge1_precision"].item()
     print(score)
-    return score["precision"]
+    return score
