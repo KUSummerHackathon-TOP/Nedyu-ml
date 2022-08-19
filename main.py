@@ -10,6 +10,8 @@ origins = [
     "*",
 ]
 
+bertscore = bert.BERTScore(model_name_or_path="distilbert-base-uncased", device = "cuda:0")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -28,7 +30,6 @@ def read_root():
 def text_similarity(summary: str, orginal: str):
     summary = summary.replace("\n", " ")
 
-    bertscore = bert.BERTScore()
     score = bertscore(summary, orginal)
     print(score)
-    return score
+    return score["precision"]
