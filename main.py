@@ -34,15 +34,15 @@ def read_root():
 
 
 @app.get("/summary_score")
-def text_similarity(summary: str, orginal: str):
+def text_similarity(summary: str, original: str):
     summary = summary.replace("\n", " ")
 
     if USEBERT:
-        score = bertscore(summary, orginal)
+        score = bertscore(summary, original)
         score = score["precision"]
     else:
         scorer = rouge.ROUGEScore()
-        score = scorer(summary, orginal)
+        score = scorer(summary, original)
         score = score["rouge1_precision"].item()
     print(score)
-    return score
+    return {"score": score}
