@@ -1,8 +1,10 @@
+import math
 from typing import Optional
 from fastapi import FastAPI
 from torchmetrics.text import bert, rouge
 
 from fastapi.middleware.cors import CORSMiddleware
+from fuzzywuzzy import fuzz
 
 app = FastAPI()
 
@@ -45,4 +47,8 @@ def text_similarity(summary: str, original: str):
         score = scorer(summary, original)
         score = score["rouge1_precision"].item()
     print(score)
+
+    score = 4 * score - 0.3 * fuzz.ratio(summary, original) / 100 - len(summary) / 50
+    score = 1 / (1 + math.exp(-score))
+
     return {"score": score}
